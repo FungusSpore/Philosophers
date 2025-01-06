@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:38:36 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/06 18:10:10 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/07 01:23:30 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,15 @@
 typedef struct s_philo
 {
 	int		index;
-	int		time_sleep;
-	int		time_eat;
-	int		time_die;
+	size_t		time_sleep;
+	size_t		time_eat;
+	size_t		time_die;
 	int		min_meals;	
-	int		start_time;
-	int		last_ate;
+	size_t		start_time;
+	size_t		last_ate;
 	int		is_dead;
-	pthread_mutex_t	left_fork;
-	pthread_mutex_t	right_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 }					t_philo;
 
 

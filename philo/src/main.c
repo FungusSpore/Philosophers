@@ -6,30 +6,49 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:38:18 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/06 17:38:38 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/07 01:36:10 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	create_threads(int *vars, t_philo *metadatas, pthread_t **threads)
+pthread_t	*create_threads(int *vars, t_philo *metadatas)
+{
+	int	i;
+	pthread_t	*threads;
+
+	i = -1;
+	threads = malloc(sizeof(pthread_t) * vars[NUM_PHILOS]);
+	if (!threads)
+	{
+		printf("Failed to allocate memory for threads\n");
+		return (NULL);
+	}
+	while (++i < vars[NUM_PHILOS])
+	{
+		if (pthread_create(threads + i, NULL, philo_routine, metadatas + i) != 0)
+		{
+			printf("Failed to make threads\n");
+			return (NULL);
+		}
+	}
+	return (threads);
+}
+
+void	wait_threads(pthread_t *threads, int *vars)
 {
 	int	i;
 
-	i = -1;
-	*threads = malloc(sizeof(pthread_t) * vars[NUM_PHILOS]);
-	if (!*threads)
+	i = 0;
+	while (i < vars[NUM_PHILOS])
 	{
-		printf("Failed to allocate memory for threads\n");
-		return (1);
-	}
-	while (++i < vars[NUM_PHILOS])
-		if (pthread_create(threads[i], NULL, philo_routine, &metadatas[i]) != 0)
+		if (pthread_join(threads[i], NULL) != 0)
 		{
-			printf("Failed to make threads\n");
-			return (2);
+			printf("Thread faild to join\n");
+			return ;
 		}
-	return (0);
+		i++;
+	}
 }
 
 int	main(int argc, char **argv)
@@ -43,5 +62,6 @@ int	main(int argc, char **argv)
 	metadatas = create_philo_metadatas(vars);
 	if (!metadatas)
 		return (2);
-	create_threads(vars, metadatas, &threads);
+	threads = create_threads(vars, metadatas);
+	wait_threads(threads, vars);
 }

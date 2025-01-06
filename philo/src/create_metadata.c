@@ -6,11 +6,12 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 17:10:47 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/06 17:56:01 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/07 01:35:39 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <stdio.h>
 
 static pthread_mutex_t	*create_forks(int *vars)
 {
@@ -25,7 +26,7 @@ static pthread_mutex_t	*create_forks(int *vars)
 		return (NULL);
 	}
 	while (i < vars[NUM_PHILOS])
-		if (pthread_mutex_init(&result[i++], NULL) != 0)
+		if (pthread_mutex_init(&(result[i++]), NULL) != 0)
 		{
 			printf("Failed to init mutex\n");
 			free(result);
@@ -45,6 +46,7 @@ t_philo	*create_philo_metadatas(int *vars)
 	if (!result)
 		return (NULL);
 	forks = create_forks(vars);
+	// printf("Forks[0]: %p, Forks[1]: %p\n", (void *)&forks[0], (void *)&forks[1]);
 	while (i < vars[NUM_PHILOS])
 	{
 		result[i].index = i + 1;
@@ -54,8 +56,14 @@ t_philo	*create_philo_metadatas(int *vars)
 		result[i].min_meals = vars[MIN_MEALS];
 		result[i].is_dead = 0;
 		result[i].last_ate = -1;
-		result[i].left_fork = forks[vars[NUM_PHILOS] - i];
-		result[i].right_fork = forks[i];
+		if (i == 0)
+			result[i].left_fork = &forks[vars[NUM_PHILOS] - 1];
+		else
+			result[i].left_fork = &forks[i - 1];
+		result[i].right_fork = &forks[i];
+		i++;
 	}
+	// printf("Right fork of Philosopher 0: %p left %p, Left fork of Philosopher 1: %p right %p\n",
+	//       (void *)(result[0].right_fork), (void *)(result[0].left_fork), (void *)(result[1].left_fork), (void *)(result[1].right_fork));
 	return (result);
 }

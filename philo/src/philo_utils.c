@@ -6,13 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 18:18:59 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/06 18:07:49 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/07 00:23:26 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-#include <bits/types/struct_timeval.h>
-#include <stdio.h>
 
 int	ft_atoi(const char *nptr)
 {
