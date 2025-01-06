@@ -6,50 +6,42 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:38:18 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/05 18:35:18 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/06 17:38:38 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	not_posi_digit(char *input)
-{
-	if (*input == '-')
-		return (1);
-	if (*input == '+')
-		input++;
-	while (*input)
-	{
-		if ('0' <= *input && *input <= '9')
-	}
-}
-
-int	check_input(int argc, char **argv, int *vars)
+int	create_threads(int *vars, t_philo *metadatas, pthread_t **threads)
 {
 	int	i;
 
-	i = 0;
-	if (argc < 5 || argc > 6)
+	i = -1;
+	*threads = malloc(sizeof(pthread_t) * vars[NUM_PHILOS]);
+	if (!*threads)
 	{
-		printf("./philo <4 - 5 args>\n");
+		printf("Failed to allocate memory for threads\n");
 		return (1);
 	}
-	while (++i < argc)
-	{
-		if (not_posi_digit(argv[i]))
+	while (++i < vars[NUM_PHILOS])
+		if (pthread_create(threads[i], NULL, philo_routine, &metadatas[i]) != 0)
 		{
-			printf("Please only enter positive numbers\n");
+			printf("Failed to make threads\n");
 			return (2);
 		}
-		vars[i - 1] = ft_atoi(argv[i]);
-	}
-
+	return (0);
 }
 
 int	main(int argc, char **argv)
 {
 	int	vars[5];
+	t_philo	*metadatas;
+	pthread_t	*threads;
+
 	if (check_input(argc, argv, vars))
 		return (1);
-
+	metadatas = create_philo_metadatas(vars);
+	if (!metadatas)
+		return (2);
+	create_threads(vars, metadatas, &threads);
 }

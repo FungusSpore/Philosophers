@@ -6,11 +6,13 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 18:18:59 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/05 18:20:14 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/06 18:07:49 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <bits/types/struct_timeval.h>
+#include <stdio.h>
 
 int	ft_atoi(const char *nptr)
 {
@@ -36,4 +38,16 @@ int	ft_atoi(const char *nptr)
 	if (is_nega)
 		result *= -1;
 	return (result);
+}
+
+size_t	get_current_time(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+	{
+		printf("Error getting time of day\n");
+		return (0);
+	}
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
