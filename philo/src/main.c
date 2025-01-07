@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:38:18 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/07 16:59:03 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/07 23:26:57 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	wait_threads(pthread_t *threads, int *vars)
 	int	i;
 
 	i = 0;
-	while (i < vars[NUM_PHILOS])
+	while (i <= vars[NUM_PHILOS])
 	{
 		if (pthread_join(threads[i], NULL) != 0)
 		{
@@ -68,6 +68,6 @@ int	main(int argc, char **argv)
 	if (!metadatas)
 		return (2);
 	threads = create_threads(vars, metadatas);
-	create_monitoring_thread(vars, metadatas);
 	wait_threads(threads, vars);
+	return (0);
 }

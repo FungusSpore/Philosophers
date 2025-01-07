@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:38:36 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/07 17:09:45 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/07 23:14:27 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_philo
 	int		is_dead;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*is_alive_mutex;
 }					t_philo;
 
 
