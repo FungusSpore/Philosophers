@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:38:18 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/07 01:36:10 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:59:03 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ pthread_t	*create_threads(int *vars, t_philo *metadatas)
 	pthread_t	*threads;
 
 	i = -1;
-	threads = malloc(sizeof(pthread_t) * vars[NUM_PHILOS]);
+	threads = malloc(sizeof(pthread_t) * (vars[NUM_PHILOS] + 1));
 	if (!threads)
 	{
 		printf("Failed to allocate memory for threads\n");
@@ -31,6 +31,11 @@ pthread_t	*create_threads(int *vars, t_philo *metadatas)
 			printf("Failed to make threads\n");
 			return (NULL);
 		}
+	}
+	if (pthread_create(threads + i, NULL, monitor_routine, metadatas) != 0)
+	{
+		printf("Failed to make threads\n");
+		return (NULL);
 	}
 	return (threads);
 }
@@ -63,5 +68,6 @@ int	main(int argc, char **argv)
 	if (!metadatas)
 		return (2);
 	threads = create_threads(vars, metadatas);
+	create_monitoring_thread(vars, metadatas);
 	wait_threads(threads, vars);
 }

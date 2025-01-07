@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:38:36 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/07 01:23:30 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/07 17:09:45 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,11 @@
 typedef struct s_philo
 {
 	int		index;
+	int		total_philo;
 	size_t		time_sleep;
 	size_t		time_eat;
 	size_t		time_die;
+	int		meals_ate;
 	int		min_meals;	
 	size_t		start_time;
 	size_t		last_ate;
@@ -59,5 +61,8 @@ t_philo	*create_philo_metadatas(int *vars);
 
 // routine
 void	*philo_routine(void *args);
+
+// monitoring
+void	*monitor_routine(void *args);
 
 #endif // !PHILO_H
