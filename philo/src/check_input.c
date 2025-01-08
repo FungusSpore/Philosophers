@@ -6,13 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:06:54 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/06 16:32:26 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:24:13 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 int	not_posi_digit(char *input)
 {
@@ -40,11 +38,13 @@ int	check_values(int *vars)
 		return (1);
 	}
 	while (i < 4)
+	{
 		if (vars[i++] < 60)
 		{
 			printf("Time cannot be less than 60 ms\n");
 			return (2);
 		}
+	}
 	return (0);
 }
 

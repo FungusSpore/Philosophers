@@ -1,5 +1,6 @@
 NAME=philo
-SOURCE= src/main.c src/philo_utils.c src/check_input.c src/create_metadata.c src/philo_routine.c src/monitor_routine.c
+SOURCE= src/main.c src/philo_utils.c src/check_input.c src/create_metadata.c \
+				src/philo_routine.c src/monitor_routine.c src/philo_routine_utils.c
 OBJ=$(SOURCE:.c=.o)
 FLAGS= -Wall -Wextra -Werror
 CC= cc

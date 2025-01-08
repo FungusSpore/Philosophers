@@ -6,35 +6,13 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:33:42 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/08 16:37:21 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:14:38 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	is_philo_dead(t_philo *metadata)
-{
-	int	is_dead;
-
-	pthread_mutex_lock(metadata->is_alive_mutex);
-	is_dead = metadata->is_dead;
-	pthread_mutex_unlock(metadata->is_alive_mutex);
-	if (is_dead)
-		return (1);
-	return (0);
-}
-
-void	philo_grab_fork(pthread_mutex_t *fork, t_philo *metadata, size_t start)
-{
-	pthread_mutex_lock(fork);
-	if (is_philo_dead(metadata))
-		return ;
-	start = get_current_time();
-	printf("%lu %d has taken a fork\n", \
-	start - metadata->start_time, metadata->index);
-}
-
-void	*lonely_philo_think(t_philo *metadata)
+static void	*lonely_philo_think(t_philo *metadata)
 {
 	size_t	start;
 
@@ -43,15 +21,17 @@ void	*lonely_philo_think(t_philo *metadata)
 	start - metadata->start_time, metadata->index);
 	philo_grab_fork(metadata->left_fork, metadata, start);
 	while (1)
+	{
 		if (metadata->is_dead)
 		{
 			pthread_mutex_unlock(metadata->left_fork);
 			return (NULL);
 		}
+	}
 	return (NULL);
 }
 
-void	philo_think(t_philo *metadata)
+static void	philo_think(t_philo *metadata)
 {
 	size_t	start;
 
@@ -63,7 +43,7 @@ void	philo_think(t_philo *metadata)
 		philo_grab_fork(metadata->left_fork, metadata, start);
 		philo_grab_fork(metadata->right_fork, metadata, start);
 	}
-	else 
+	else
 	{
 		philo_grab_fork(metadata->right_fork, metadata, start);
 		philo_grab_fork(metadata->left_fork, metadata, start);
@@ -75,7 +55,7 @@ void	philo_think(t_philo *metadata)
 	}
 }
 
-void	philo_eat(t_philo *metadata)
+static void	philo_eat(t_philo *metadata)
 {
 	size_t	start;
 
@@ -90,7 +70,7 @@ void	philo_eat(t_philo *metadata)
 	pthread_mutex_unlock(metadata->right_fork);
 }
 
-void	philo_sleep(t_philo *metadata)
+static void	philo_sleep(t_philo *metadata)
 {
 	size_t	start;
 
