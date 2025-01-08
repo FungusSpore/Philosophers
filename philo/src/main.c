@@ -5,12 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/05 17:38:18 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/07 23:26:57 by jianwong         ###   ########.fr       */
+/*   Created: 2025/01/08 13:54:30 by jianwong          #+#    #+#             */
+/*   Updated: 2025/01/08 16:35:49 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <pthread.h>
 
 pthread_t	*create_threads(int *vars, t_philo *metadatas)
 {
@@ -24,6 +25,7 @@ pthread_t	*create_threads(int *vars, t_philo *metadatas)
 		printf("Failed to allocate memory for threads\n");
 		return (NULL);
 	}
+	pthread_mutex_lock(metadatas->is_philo_ready_mutex);
 	while (++i < vars[NUM_PHILOS])
 	{
 		if (pthread_create(threads + i, NULL, philo_routine, metadatas + i) != 0)
@@ -37,6 +39,7 @@ pthread_t	*create_threads(int *vars, t_philo *metadatas)
 		printf("Failed to make threads\n");
 		return (NULL);
 	}
+	pthread_mutex_unlock(metadatas->is_philo_ready_mutex);
 	return (threads);
 }
 
@@ -55,6 +58,18 @@ void	wait_threads(pthread_t *threads, int *vars)
 		i++;
 	}
 }
+void	free_metadata(t_philo *metadatas)
+{
+	int	i;
+
+	i = 0;
+	// while (i < metadatas->total_philo)
+	// {
+	// 	metadatas->
+	// }
+	pthread_mutex_destroy(metadatas->is_alive_mutex);
+	pthread_mutex_destroy(metadatas->is_philo_ready_mutex);
+}
 
 int	main(int argc, char **argv)
 {
@@ -69,5 +84,6 @@ int	main(int argc, char **argv)
 		return (2);
 	threads = create_threads(vars, metadatas);
 	wait_threads(threads, vars);
+	free_metadata(metadatas);
 	return (0);
 }

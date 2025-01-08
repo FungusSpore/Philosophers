@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 17:10:47 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/07 23:17:22 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:45:12 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ t_philo	*create_philo_metadatas(int *vars)
 {
 	t_philo		*result;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	is_alive_mutex;
+	pthread_mutex_t	*is_alive_mutex;
+	pthread_mutex_t	*is_philo_ready_mutex;
 	int				i;
 
 	i = 0;
@@ -46,7 +47,10 @@ t_philo	*create_philo_metadatas(int *vars)
 	if (!result)
 		return (NULL);
 	forks = create_forks(vars);
-	pthread_mutex_init(&is_alive_mutex, NULL);
+	is_alive_mutex = malloc(sizeof(pthread_mutex_t));
+	is_philo_ready_mutex = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(is_alive_mutex, NULL);
+	pthread_mutex_init(is_philo_ready_mutex, NULL);
 	while (i < vars[NUM_PHILOS])
 	{
 		result[i].index = i + 1;
@@ -61,7 +65,8 @@ t_philo	*create_philo_metadatas(int *vars)
 		result[i].last_ate = get_current_time();
 		result[i].left_fork = &forks[(i + 1) % vars[NUM_PHILOS]];
 		result[i].right_fork = &forks[i];
-		result[i].is_alive_mutex = &is_alive_mutex;
+		result[i].is_alive_mutex = is_alive_mutex;
+		result[i].is_philo_ready_mutex = is_philo_ready_mutex;
 		i++;
 	}
 	return (result);

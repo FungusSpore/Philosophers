@@ -6,13 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:16:52 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/07 23:52:00 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/08 16:38:23 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-#include <pthread.h>
-#include <stdio.h>
 
 void	handle_death(int i, t_philo *metadatas)
 {
@@ -24,6 +22,7 @@ void	handle_death(int i, t_philo *metadatas)
 	j = 0;
 	while (j < size)
 		metadatas[j++].is_dead = 1;
+	usleep(100);
 	printf("%lu %d died\n", get_current_time() - metadatas->start_time, i + 1);
 	pthread_mutex_unlock(metadatas->is_alive_mutex);
 }
@@ -52,7 +51,7 @@ void	*monitor_routine(void *args)
 	i = 0;
 	while (1)
 	{
-		if (metadatas->min_meals > 0 && all_finished_eating(metadatas))
+		if (metadatas->min_meals > -1 && all_finished_eating(metadatas))
 			break ;
 		time_since_last_meal = \
 		get_current_time() - metadatas[i % metadatas->total_philo].last_ate;
