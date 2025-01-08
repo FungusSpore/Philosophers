@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 18:19:57 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/08 18:20:25 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/09 00:19:16 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,12 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <pthread.h>
+# include <semaphore.h>
 # include <sys/time.h>
+# include <fcntl.h>
+
+// semaphore path
+# define SEM_PATH "/semaphore"
 
 // maximum number of philos
 # define MAX_PHILOS 200
@@ -61,15 +66,5 @@ int			check_input(int argc, char **argv, int *vars);
 t_philo		*create_philo_metadatas(int *vars, pthread_mutex_t **forks);
 void		free_metadata(t_philo *metadatas, pthread_mutex_t *forks);
 
-// routine
-void		*philo_routine(void *args);
-
-// routine utils
-int			is_philo_dead(t_philo *metadata);
-void		philo_grab_fork(pthread_mutex_t *fork, \
-t_philo *metadata, size_t start);
-
-// monitoring
-void		*monitor_routine(void *args);
 
 #endif // !PHILO_H
