@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 18:19:57 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/09 00:19:16 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/09 22:16:57 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,12 @@
 # include <semaphore.h>
 # include <sys/time.h>
 # include <fcntl.h>
+# include <signal.h>
+# include <wait.h>
 
 // semaphore path
-# define SEM_PATH "/semaphore"
+# define SEM_FORK "/semaphore"
+# define SEM_ISDEAD "/isdead"
 
 // maximum number of philos
 # define MAX_PHILOS 200
@@ -49,10 +52,8 @@ typedef struct s_philo
 	size_t				start_time;
 	size_t				last_ate;
 	int					is_dead;
-	pthread_mutex_t		*left_fork;
-	pthread_mutex_t		*right_fork;
-	pthread_mutex_t		*is_alive_mutex;
-	pthread_mutex_t		*is_philo_ready_mutex;
+	sem_t				*forks_sem;
+	sem_t				*is_alive_sem;
 }					t_philo;
 
 // philo_utils
@@ -63,8 +64,12 @@ size_t		get_current_time(void);
 int			check_input(int argc, char **argv, int *vars);
 
 // metadata
-t_philo		*create_philo_metadatas(int *vars, pthread_mutex_t **forks);
+t_philo	*create_philo_metadatas(int *vars);
 void		free_metadata(t_philo *metadatas, pthread_mutex_t *forks);
 
+void	*philo_routine(void *args);
+
+void	philo_grab_fork(sem_t *sem_fork, t_philo *metadata, size_t start);
+int	is_philo_dead(t_philo *metadata);
 
 #endif // !PHILO_H

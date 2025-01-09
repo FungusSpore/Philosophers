@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 00:25:15 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/09 00:29:42 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/09 22:50:20 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ static void	*lonely_philo_think(t_philo *metadata)
 	start = get_current_time();
 	printf("%lu %d is thinking\n", \
 	start - metadata->start_time, metadata->index);
-	philo_grab_fork(metadata->left_fork, metadata, start);
+	philo_grab_fork(metadata->forks_sem, metadata, start);
 	while (1)
 	{
 		if (metadata->is_dead)
 		{
-			pthread_mutex_unlock(metadata->left_fork);
+			sem_post(metadata->forks_sem);
 			return (NULL);
 		}
 	}
@@ -38,20 +38,12 @@ static void	philo_think(t_philo *metadata)
 	start = get_current_time();
 	printf("%lu %d is thinking\n", \
 	start - metadata->start_time, metadata->index);
-	if (metadata->index % 2 == 1)
-	{
-		philo_grab_fork(metadata->left_fork, metadata, start);
-		philo_grab_fork(metadata->right_fork, metadata, start);
-	}
-	else
-	{
-		philo_grab_fork(metadata->right_fork, metadata, start);
-		philo_grab_fork(metadata->left_fork, metadata, start);
-	}
+	philo_grab_fork(metadata->forks_sem, metadata, start);
+	philo_grab_fork(metadata->forks_sem, metadata, start);
 	if (metadata->is_dead)
 	{
-		pthread_mutex_unlock(metadata->left_fork);
-		pthread_mutex_unlock(metadata->right_fork);
+		sem_post(metadata->forks_sem);
+		sem_post(metadata->forks_sem);
 	}
 }
 
@@ -66,8 +58,8 @@ static void	philo_eat(t_philo *metadata)
 	if (metadata->min_meals > 0)
 		metadata->meals_ate++;
 	usleep(metadata->time_eat * 1000);
-	pthread_mutex_unlock(metadata->left_fork);
-	pthread_mutex_unlock(metadata->right_fork);
+	sem_post(metadata->forks_sem);
+	sem_post(metadata->forks_sem);
 }
 
 static void	philo_sleep(t_philo *metadata)
@@ -85,8 +77,10 @@ void	*philo_routine(void *args)
 	t_philo	*metadata;
 
 	metadata = (t_philo *)args;
-	pthread_mutex_lock(metadata->is_philo_ready_mutex);
-	pthread_mutex_unlock(metadata->is_philo_ready_mutex);
+	sem_wait(metadata->is_alive_sem);
+	sem_post(metadata->is_alive_sem);
+	if (metadata->index % 2 == 1)
+		usleep(200);
 	if (metadata->total_philo == 1)
 		return (lonely_philo_think(metadata));
 	while (metadata->meals_ate != metadata->min_meals)
