@@ -6,11 +6,12 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:52:53 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/10 14:54:17 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/10 15:24:53 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
+#include <stddef.h>
 #include <stdio.h>
 
 static pthread_t	*create_thread(t_philo *metadatas)
@@ -40,12 +41,16 @@ static void	handle_death(t_philo *metadatas)
 int	monitor_thread(t_philo *metadatas)
 {
 	size_t	time_since_last_meal;
+	size_t	last_ate;
+	size_t	current;
 
 	while (1)
 	{
 		if (metadatas->min_meals > -1 && (metadatas->meals_ate > metadatas->min_meals))
 			break ;
-		time_since_last_meal = get_current_time() - metadatas->last_ate;
+		last_ate = metadatas->last_ate;
+		current = get_current_time();
+		time_since_last_meal = current - last_ate;
 		if (time_since_last_meal >= metadatas->time_die && \
 		metadatas->meals_ate != metadatas->min_meals)
 		{
@@ -119,8 +124,6 @@ int	main(int argc, char **argv)
 	metadatas = create_philo_metadatas(vars);
 	if (!metadatas)
 		return (2);
-	// printf("min_meals %d\n", metadatas->min_meals);
-	// exit(0);
 	if (create_child(vars, metadatas, &pids))
 		return (3);
 	kill_child(pids, vars);
