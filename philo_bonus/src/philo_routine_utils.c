@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:23:56 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/09 22:56:47 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:35:50 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
-#include <stdio.h>
 
 int	is_philo_dead(t_philo *metadata)
 {

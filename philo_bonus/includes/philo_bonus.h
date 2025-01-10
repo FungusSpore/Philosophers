@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 18:19:57 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/09 22:16:57 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:59:44 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 // semaphore path
 # define SEM_FORK "/semaphore"
 # define SEM_ISDEAD "/isdead"
+# define SEM_LASTMEAL "/lastmeal"
 
 // maximum number of philos
 # define MAX_PHILOS 200
@@ -54,11 +55,13 @@ typedef struct s_philo
 	int					is_dead;
 	sem_t				*forks_sem;
 	sem_t				*is_alive_sem;
+	sem_t				*last_ate_sem;
 }					t_philo;
 
 // philo_utils
 int			ft_atoi(const char *nptr);
 size_t		get_current_time(void);
+void	ft_sleep(size_t time);
 
 // checker
 int			check_input(int argc, char **argv, int *vars);
@@ -71,5 +74,9 @@ void	*philo_routine(void *args);
 
 void	philo_grab_fork(sem_t *sem_fork, t_philo *metadata, size_t start);
 int	is_philo_dead(t_philo *metadata);
+
+void	kill_child(int *pids, int *vars);
+int	create_child(int *vars, t_philo *metadatas, int **pids);
+int	monitor_thread(t_philo *metadatas);
 
 #endif // !PHILO_H

@@ -6,11 +6,12 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 18:29:03 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/09 15:22:08 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/10 17:04:54 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
+#include <stdio.h>
 
 int	ft_atoi(const char *nptr)
 {
@@ -49,3 +50,11 @@ size_t	get_current_time(void)
 	}
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
+// void	ft_sleep(size_t time)
+// {
+// 	size_t	start;
+//
+// 	start = get_current_time();
+// 	while (get_current_time() - start <= time);
+// 	return ;
+// }

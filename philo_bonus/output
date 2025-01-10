@@ -1,18 +1,11 @@
-12 2 is thinking
-12 2 has taken a fork
-12 2 has taken a fork
-12 2 is eating
-212 2 is sleeping
-412 2 is thinking
-412 2 has taken a fork
-412 2 has taken a fork
-412 2 is eating
-612 2 is sleeping
-813 2 is thinking
-813 2 has taken a fork
-1012 2 has taken a fork
-1012 2 is eating
-current_time   1736493861132
-last_ate   1736493860520
-time_since_last_meal 612 time_die 605
-1024 2 died
+index 0
+12 1 is thinking
+211 1 has taken a fork
+211 1 has taken a fork
+211 1 is eating
+412 1 is sleeping
+612 1 is thinking
+612 1 has taken a fork
+612 1 has taken a fork
+612 1 is eating
+624 1 died
