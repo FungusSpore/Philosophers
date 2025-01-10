@@ -6,14 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:04:44 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/09 22:45:31 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/10 14:33:29 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
-#include <fcntl.h>
-#include <semaphore.h>
-#include <stdio.h>
 
 static void	metadata_init(t_philo *result, \
 int *vars, int i)
@@ -48,11 +45,6 @@ t_philo	*create_philo_metadatas(int *vars)
 	forks_sem = sem_open(SEM_FORK, O_CREAT, 0666, vars[NUM_PHILOS]);
 	sem_unlink(SEM_ISDEAD);
 	is_alive_sem = sem_open(SEM_ISDEAD, O_CREAT, 0666, 1);
-	// int sem_value;
-	// sem_getvalue(forks_sem, &sem_value);
-	// printf("Semaphore value: %d\n", sem_value);
-	// sem_getvalue(is_alive_sem, &sem_value);
-	// printf("Semaphore value: %d\n", sem_value);
 	while (i < vars[NUM_PHILOS])
 	{
 		metadata_init(result, vars, i);

@@ -7,7 +7,7 @@ CC= cc
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $^ -o $(NAME)
+	$(CC) $(FLAGS) $^ -o $(NAME)
 
 %.o:%.c
 	$(CC) $(FLAGS) -c $< -o $@
