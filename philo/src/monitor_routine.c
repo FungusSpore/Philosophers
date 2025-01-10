@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:16:52 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/08 17:13:48 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:38:36 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	*monitor_routine(void *args)
 {
 	t_philo	*metadatas;
 	size_t	time_since_last_meal;
+	size_t	current_time;
+	size_t	last_ate;
 	size_t	i;
 
 	metadatas = (t_philo *)args;
@@ -53,8 +55,9 @@ void	*monitor_routine(void *args)
 	{
 		if (metadatas->min_meals > -1 && all_finished_eating(metadatas))
 			break ;
-		time_since_last_meal = \
-		get_current_time() - metadatas[i % metadatas->total_philo].last_ate;
+		last_ate = metadatas[i % metadatas->total_philo].last_ate;
+		current_time = get_current_time();
+		time_since_last_meal = current_time - last_ate;
 		if (time_since_last_meal >= metadatas->time_die && \
 		metadatas[i % metadatas->total_philo].meals_ate != metadatas->min_meals)
 		{

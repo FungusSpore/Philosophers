@@ -6,13 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 00:25:15 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/10 18:03:52 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:47:10 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
-#include <semaphore.h>
-#include <stdio.h>
 
 static void	*lonely_philo_think(t_philo *metadata)
 {
@@ -95,7 +93,7 @@ void	*philo_routine(void *args)
 			philo_sleep(metadata);
 		if (is_philo_dead(metadata))
 			break ;
-		usleep(200);
+		usleep(1000);
 	}
 	return (NULL);
 }

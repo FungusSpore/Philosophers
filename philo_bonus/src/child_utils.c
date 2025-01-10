@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/10 16:34:20 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/10 18:04:09 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/10 22:50:42 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
-#include <semaphore.h>
 
 static pthread_t	*create_thread(t_philo *metadatas)
 {
@@ -45,7 +44,6 @@ int	monitor_thread(t_philo *metadatas)
 
 	while (1)
 	{
-		sem_wait(metadatas->last_ate_sem);
 		if (metadatas->min_meals > -1 && (metadatas->meals_ate >= metadatas->min_meals))
 			break ;
 		last_ate = metadatas->last_ate;
