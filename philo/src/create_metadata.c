@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 17:10:47 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/12 00:24:13 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 01:33:27 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
-#include <stdlib.h>
 
 void	free_metadata(t_philo *metadatas, pthread_mutex_t *forks)
 {
@@ -24,8 +23,10 @@ void	free_metadata(t_philo *metadatas, pthread_mutex_t *forks)
 		i++;
 	}
 	pthread_mutex_destroy(metadatas->is_alive_mutex);
+	pthread_mutex_destroy(metadatas->read_last_ate_mutex);
 	pthread_mutex_destroy(metadatas->is_philo_ready_mutex);
 	free(metadatas->is_alive_mutex);
+	free(metadatas->read_last_ate_mutex);
 	free(metadatas->is_philo_ready_mutex);
 	free(forks);
 	free(metadatas);

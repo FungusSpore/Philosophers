@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 18:29:03 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/10 17:04:54 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 01:31:27 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
-#include <stdio.h>
 
 int	ft_atoi(const char *nptr)
 {

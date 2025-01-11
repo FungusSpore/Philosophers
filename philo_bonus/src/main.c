@@ -6,12 +6,11 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 23:52:53 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/12 00:45:11 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 01:31:41 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
-#include <semaphore.h>
 
 int	main(int argc, char **argv)
 {
