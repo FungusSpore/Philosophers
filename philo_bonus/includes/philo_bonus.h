@@ -6,12 +6,12 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/08 18:19:57 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/10 17:59:44 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 01:27:09 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILO_BONUS_H
+# define PHILO_BONUS_H
 
 # include <unistd.h>
 # include <string.h>
@@ -27,7 +27,13 @@
 // semaphore path
 # define SEM_FORK "/semaphore"
 # define SEM_ISDEAD "/isdead"
+# define SEM_READY "/isready"
 # define SEM_LASTMEAL "/lastmeal"
+
+# define FORK 0
+# define READY 1
+# define ISDEAD 2
+# define LASTMEAL 3
 
 // maximum number of philos
 # define MAX_PHILOS 200
@@ -54,6 +60,7 @@ typedef struct s_philo
 	size_t				last_ate;
 	int					is_dead;
 	sem_t				*forks_sem;
+	sem_t				*is_ready_sem;
 	sem_t				*is_alive_sem;
 	sem_t				*last_ate_sem;
 }					t_philo;
@@ -61,22 +68,25 @@ typedef struct s_philo
 // philo_utils
 int			ft_atoi(const char *nptr);
 size_t		get_current_time(void);
-void	ft_sleep(size_t time);
+void		ft_sleep(size_t time);
 
 // checker
 int			check_input(int argc, char **argv, int *vars);
 
 // metadata
-t_philo	*create_philo_metadatas(int *vars);
+t_philo		*create_philo_metadatas(int *vars);
 void		free_metadata(t_philo *metadatas, pthread_mutex_t *forks);
 
-void	*philo_routine(void *args);
+// routine
+void		*philo_routine(void *args);
+void		philo_grab_fork(sem_t *sem_fork, t_philo *metadata, size_t start);
+int			is_philo_dead(t_philo *metadata);
 
-void	philo_grab_fork(sem_t *sem_fork, t_philo *metadata, size_t start);
-int	is_philo_dead(t_philo *metadata);
+// baby making
+void		kill_child(int *pids, int *vars);
+int			create_child(int *vars, t_philo *metadatas, int **pids);
 
-void	kill_child(int *pids, int *vars);
-int	create_child(int *vars, t_philo *metadatas, int **pids);
-int	monitor_thread(t_philo *metadatas);
+// monitoring baby
+int			monitor_thread(t_philo *metadatas);
 
 #endif // !PHILO_H

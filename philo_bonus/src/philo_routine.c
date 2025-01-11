@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 00:25:15 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/10 22:47:10 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 01:11:32 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	philo_think(t_philo *metadata)
 	start = get_current_time();
 	printf("%lu %d is thinking\n", \
 	start - metadata->start_time, metadata->index);
+	usleep(1000);
 	philo_grab_fork(metadata->forks_sem, metadata, start);
 	philo_grab_fork(metadata->forks_sem, metadata, start);
 	if (metadata->is_dead)
@@ -51,11 +52,11 @@ static void	philo_eat(t_philo *metadata)
 {
 	size_t	start;
 
+	sem_wait(metadata->last_ate_sem);
 	start = get_current_time();
 	printf("%lu %d is eating\n", \
 	start - metadata->start_time, metadata->index);
 	metadata->last_ate = start;
-	sem_wait(metadata->last_ate_sem);
 	if (metadata->min_meals > -1)
 		metadata->meals_ate++;
 	sem_post(metadata->last_ate_sem);
@@ -80,7 +81,7 @@ void	*philo_routine(void *args)
 
 	metadata = (t_philo *)args;
 	if (metadata->index % 2 == 1)
-		usleep(metadata->time_eat * 950);
+		usleep(metadata->time_eat * 900);
 	if (metadata->total_philo == 1)
 		return (lonely_philo_think(metadata));
 	while (metadata->meals_ate != metadata->min_meals)
@@ -93,7 +94,6 @@ void	*philo_routine(void *args)
 			philo_sleep(metadata);
 		if (is_philo_dead(metadata))
 			break ;
-		usleep(1000);
 	}
 	return (NULL);
 }

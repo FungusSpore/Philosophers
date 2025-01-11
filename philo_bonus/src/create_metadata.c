@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/09 17:04:44 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/10 17:59:50 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 01:24:07 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,23 @@ int *vars, int i)
 	result[i].is_dead = 0;
 }
 
+void	open_semaphores(sem_t **semaphores, int *vars)
+{
+	sem_unlink(SEM_FORK);
+	semaphores[FORK] = sem_open(SEM_FORK, O_CREAT, 0666, vars[NUM_PHILOS]);
+	sem_unlink(SEM_READY);
+	semaphores[READY] = sem_open(SEM_READY, O_CREAT, 0666, 1);
+	sem_unlink(SEM_ISDEAD);
+	semaphores[ISDEAD] = sem_open(SEM_ISDEAD, O_CREAT, 0666, 1);
+	sem_unlink(SEM_LASTMEAL);
+	semaphores[LASTMEAL] = sem_open(SEM_LASTMEAL, O_CREAT, 0666, 1);
+}
+
 t_philo	*create_philo_metadatas(int *vars)
 {
-	t_philo				*result;
-	sem_t		*forks_sem;
-	sem_t		*is_alive_sem;
-	sem_t		*last_meal_sem;
-	int					i;
+	sem_t			*semaphores[4];
+	t_philo			*result;
+	int				i;
 
 	i = 0;
 	result = malloc(sizeof(t_philo) * vars[NUM_PHILOS]);
@@ -40,18 +50,14 @@ t_philo	*create_philo_metadatas(int *vars)
 		printf("Failed to malloc vars\n");
 		return (NULL);
 	}
-	sem_unlink(SEM_FORK);
-	forks_sem = sem_open(SEM_FORK, O_CREAT, 0666, vars[NUM_PHILOS]);
-	sem_unlink(SEM_ISDEAD);
-	is_alive_sem = sem_open(SEM_ISDEAD, O_CREAT, 0666, 1);
-	sem_unlink(SEM_LASTMEAL);
-	last_meal_sem = sem_open(SEM_LASTMEAL, O_CREAT, 0666, 1);
+	open_semaphores(semaphores, vars);
 	while (i < vars[NUM_PHILOS])
 	{
 		metadata_init(result, vars, i);
-		result[i].forks_sem = forks_sem;
-		result[i].is_alive_sem = is_alive_sem;
-		result[i].last_ate_sem = last_meal_sem;
+		result[i].forks_sem = semaphores[FORK];
+		result[i].is_ready_sem = semaphores[READY];
+		result[i].is_alive_sem = semaphores[ISDEAD];
+		result[i].last_ate_sem = semaphores[LASTMEAL];
 		i++;
 	}
 	return (result);
