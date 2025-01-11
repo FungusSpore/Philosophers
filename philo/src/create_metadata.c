@@ -6,11 +6,12 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 17:10:47 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/08 18:17:08 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 00:24:13 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+#include <stdlib.h>
 
 void	free_metadata(t_philo *metadatas, pthread_mutex_t *forks)
 {
@@ -71,37 +72,37 @@ int *vars, pthread_mutex_t *forks, int i)
 	result[i].right_fork = &forks[i];
 }
 
-static int	malloc_vars(t_philo **result, pthread_mutex_t **is_alive_mutex, \
-pthread_mutex_t **is_philo_ready_mutex, int *vars)
+static int	malloc_vars(t_philo **result, pthread_mutex_t **mutexs, int *vars)
 {
+	int	i;
+
+	i = 0;
 	*result = malloc(sizeof(t_philo) * vars[NUM_PHILOS]);
 	if (!*result)
 		return (1);
-	*is_alive_mutex = malloc(sizeof(pthread_mutex_t));
-	if (!*is_alive_mutex)
+	while (i < 3)
 	{
-		free(*result);
-		return (1);
-	}
-	*is_philo_ready_mutex = malloc(sizeof(pthread_mutex_t));
-	if (!*is_philo_ready_mutex)
-	{
-		free(*is_alive_mutex);
-		free(*result);
-		return (1);
+		mutexs[i] = malloc(sizeof(pthread_mutex_t));
+		if (!mutexs[i])
+		{
+			while (i)
+				free(mutexs[i--]);
+			free(*result);
+			return (1);
+		}
+		i++;
 	}
 	return (0);
 }
 
 t_philo	*create_philo_metadatas(int *vars, pthread_mutex_t **forks)
 {
-	pthread_mutex_t		*is_alive_mutex;
-	pthread_mutex_t		*is_philo_ready_mutex;
+	pthread_mutex_t		*mutexs[3];
 	t_philo				*result;
 	int					i;
 
 	i = 0;
-	if (malloc_vars(&result, &is_alive_mutex, &is_philo_ready_mutex, vars))
+	if (malloc_vars(&result, mutexs, vars))
 	{
 		printf("Failed to malloc vars\n");
 		return (NULL);
@@ -109,13 +110,15 @@ t_philo	*create_philo_metadatas(int *vars, pthread_mutex_t **forks)
 	*forks = create_forks(vars);
 	if (!*forks)
 		return (NULL);
-	pthread_mutex_init(is_alive_mutex, NULL);
-	pthread_mutex_init(is_philo_ready_mutex, NULL);
+	pthread_mutex_init(mutexs[IS_ALIVE], NULL);
+	pthread_mutex_init(mutexs[PHILO_READY], NULL);
+	pthread_mutex_init(mutexs[LAST_ATE], NULL);
 	while (i < vars[NUM_PHILOS])
 	{
 		metadata_init(result, vars, *forks, i);
-		result[i].is_alive_mutex = is_alive_mutex;
-		result[i].is_philo_ready_mutex = is_philo_ready_mutex;
+		result[i].is_alive_mutex = mutexs[IS_ALIVE];
+		result[i].is_philo_ready_mutex = mutexs[PHILO_READY];
+		result[i].read_last_ate_mutex = mutexs[LAST_ATE];
 		i++;
 	}
 	return (result);

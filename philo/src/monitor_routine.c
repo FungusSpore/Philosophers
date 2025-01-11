@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:16:52 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/10 22:38:36 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 01:06:08 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	handle_death(int i, t_philo *metadatas)
 	j = 0;
 	while (j < size)
 		metadatas[j++].is_dead = 1;
-	usleep(100);
+	usleep(1000);
 	printf("%lu %d died\n", get_current_time() - metadatas->start_time, i + 1);
 	pthread_mutex_unlock(metadatas->is_alive_mutex);
 }
@@ -45,25 +45,24 @@ void	*monitor_routine(void *args)
 {
 	t_philo	*metadatas;
 	size_t	time_since_last_meal;
-	size_t	current_time;
-	size_t	last_ate;
 	size_t	i;
 
 	metadatas = (t_philo *)args;
 	i = 0;
 	while (1)
 	{
+		pthread_mutex_lock(metadatas->read_last_ate_mutex);
 		if (metadatas->min_meals > -1 && all_finished_eating(metadatas))
 			break ;
-		last_ate = metadatas[i % metadatas->total_philo].last_ate;
-		current_time = get_current_time();
-		time_since_last_meal = current_time - last_ate;
+		time_since_last_meal = get_current_time() - \
+		metadatas[i % metadatas->total_philo].last_ate;
 		if (time_since_last_meal >= metadatas->time_die && \
 		metadatas[i % metadatas->total_philo].meals_ate != metadatas->min_meals)
 		{
 			handle_death(i % metadatas->total_philo, metadatas);
 			break ;
 		}
+		pthread_mutex_unlock(metadatas->read_last_ate_mutex);
 		i++;
 	}
 	return (NULL);

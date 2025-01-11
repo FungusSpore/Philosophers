@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 17:38:36 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/08 18:17:31 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/12 00:18:23 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 # include <stdio.h>
 # include <pthread.h>
 # include <sys/time.h>
+
+# define IS_ALIVE 0
+# define PHILO_READY 1
+# define LAST_ATE 2
 
 // maximum number of philos
 # define MAX_PHILOS 200
@@ -48,6 +52,7 @@ typedef struct s_philo
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*is_alive_mutex;
 	pthread_mutex_t		*is_philo_ready_mutex;
+	pthread_mutex_t		*read_last_ate_mutex;
 }					t_philo;
 
 // philo_utils
