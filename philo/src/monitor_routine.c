@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 16:16:52 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/12 01:06:08 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/13 14:47:09 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	handle_death(int i, t_philo *metadatas)
 	j = 0;
 	while (j < size)
 		metadatas[j++].is_dead = 1;
-	usleep(1000);
+	usleep(100);
 	printf("%lu %d died\n", get_current_time() - metadatas->start_time, i + 1);
 	pthread_mutex_unlock(metadatas->is_alive_mutex);
 }
