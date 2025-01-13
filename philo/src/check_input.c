@@ -6,7 +6,7 @@
 /*   By: jianwong <jianwong@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 16:06:54 by jianwong          #+#    #+#             */
-/*   Updated: 2025/01/08 17:24:13 by jianwong         ###   ########.fr       */
+/*   Updated: 2025/01/13 15:02:47 by jianwong         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,12 @@ int	check_values(int *vars)
 	int	i;
 
 	i = 0;
-	if (vars[i++] > MAX_PHILOS)
+	if (vars[i] > MAX_PHILOS || vars[i] <= 0)
 	{
-		printf("Enter only 200 or less philos\n");
+		printf("Enter only 200 or less or more than zero philo\n");
 		return (1);
 	}
+	i++;
 	while (i < 4)
 	{
 		if (vars[i++] < 60)
